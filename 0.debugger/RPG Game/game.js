@@ -134,7 +134,7 @@ class Player {
 
 		return (this.attack + this.weapon.getDamage()) * this.getLuck() / dist;
 	};
-
+debugger;
 	takeDamage(damage) {
 		if(this.life - damage <= 0){
 			console.log(`${this.name} получает смертельный урон урон.`);
