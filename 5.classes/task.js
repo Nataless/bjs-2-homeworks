@@ -62,22 +62,20 @@ class Library {
 	addBook(book) {
 		(book.state > 30) ? this.books.push(book): this.books.push(null);
 	}
+
 	findBookBy(type, value) {
-		let bookIndex = this.books.findIndex((item) => item[type] === value);
-		return this.books[bookIndex] = (bookIndex != -1) ? this.books[bookIndex] : null;
+		const findResult = this.books.find((item) => item[type] === value);
+		return findResult || null;
+	   }
+
+	   giveBookByName(bookName) {
+		const book = this.findBookBy("name", bookName);
+		if (!book) return null;
+		this.books = this.books.filter((item) => item.name !== bookName);
+		return book;
+	  }
 	}
 
-	giveBookByName(bookName) {
-		let bookIndex = this.books.findIndex((item) => item.name === bookName);
-		if (bookIndex != -1) {
-			let currentBook = this.books[bookIndex];
-			this.books.splice([bookIndex], [1]);
-			return currentBook;
-		} else {
-			return null;
-		}
-	}
-}
 
 // Задача №3
 
@@ -97,16 +95,19 @@ class Student {
 	}
   
 	getAverageBySubject(subject) {
-	  if (this.marks[subject] != undefined || this.marks[subject].length > 0) {
-		let sum = this.marks[subject].reduce((acc, item) => acc += item);
-		return sum / this.marks[subject].length
-	  } else if (this.marks[subject] != undefined || this.marks[subject].length === 0) {
-		return console.log('Нет оценок дя расчета');
-	  } else {
-		return 0;
+		if (this.marks.hasOwnProperty(subject) === false) {
+		  return 0;
+		}
+		const averageScore = this.marks[subject].reduce((acc, mark, index, arr) => {
+		  acc += mark;
+		  if (index === arr.length - 1) {
+			return acc / arr.length;
+		  }
+		  return acc;
+		}, 0);
+		return averageScore;
 	  }
-	}
-  
+
 	getAverage() {
 	  let length = 0;
 	  let sum = 0;
@@ -114,7 +115,7 @@ class Student {
 		sum += this.marks[key].reduce((acc, item) => acc += item);
 		length += this.marks[key].length;
 	  }
-	  return sum / length
+	  return sum / length  || 0;
 	}
   
 	exclude(reason) {
